@@ -1,0 +1,9 @@
+﻿- repository: ./lampac-ukraine
+  branch: main
+  modules:
+    - AnimeON
+    - Anihub
+    - Unimay
+    - CikavaIdeya
+    - Uaflix
+    - UaTUT
