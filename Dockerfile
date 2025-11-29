@@ -1,7 +1,7 @@
 ﻿## ------------------------
 # Базовий образ Lampac (з Docker Hub)
 # ------------------------
-FROM yumata/lampac:latest
+FROM immisterio/lampac:latest
 
 # ------------------------
 # Встановлення git
