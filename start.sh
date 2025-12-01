@@ -1,25 +1,41 @@
 #!/bin/bash
 set -e
 
-echo "=== Lampac build detected — OK ==="
+echo "=== Fetching Lampac source ==="
 
-# -------------------------------------------------------
-# PERSISTENT DISK CACHE (Render mount)
-# -------------------------------------------------------
+rm -rf /app/lampac
+mkdir -p /app/lampac
+
+# Завантажуємо Lampac ZIP (Render дозволяє wget у runtime!)
+wget -O /app/lampac.zip https://github.com/lampame/lampac/archive/refs/heads/main.zip
+
+echo "=== Unzipping ==="
+unzip /app/lampac.zip -d /app/
+mv /app/lampac-main /app/lampac
+rm /app/lampac.zip
+
+echo "=== Building Lampac ==="
+cd /app/lampac
+dotnet publish Lampac.csproj -c Release -o /app/run
+
+# ============================
+# MODULE CACHE ON RENDER DISK
+# ============================
+
 if [ ! -d "/persistent/modules" ]; then
-    echo "=== First run: cloning Ukraine modules ==="
+    echo "=== First download of UA modules ==="
     git clone https://github.com/lampac-ukraine/lampac-ukraine.git /persistent/modules
 else
-    echo "=== Updating Ukraine modules ==="
+    echo "=== Updating UA modules ==="
     cd /persistent/modules
     git pull || true
 fi
 
-echo "=== Copying modules to runtime ==="
-rm -rf /app/module
-mkdir -p /app/module
-cp -r /persistent/modules/* /app/module/
+echo "=== Copying modules ==="
+rm -rf /app/run/module
+mkdir -p /app/run/module
+cp -r /persistent/modules/* /app/run/module/
 
 echo "=== Starting Lampac ==="
-cd /app
+cd /app/run
 exec dotnet Lampac.dll
