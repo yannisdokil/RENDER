@@ -2,11 +2,15 @@ services:
   - name: lampac-ukraine
     type: web
     env: docker
-    plan: free   # можеш змінити на starter для без сну
+    plan: free
     dockerfilePath: ./Dockerfile
     autoDeploy: true
+
+    disk:
+      name: persistent
+      mountPath: /persistent
+      sizeGB: 1
+
     envVars:
       - key: ASPNETCORE_URLS
         value: http://0.0.0.0:8080
-    ports:
-      - port: 8080
