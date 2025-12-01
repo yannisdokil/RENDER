@@ -1,3 +1,18 @@
+FROM debian:12
+
+RUN apt update && apt install -y \
+    bash curl wget git ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/yannisdokil/RENDER /app
+WORKDIR /app
+
+RUN bash Build/Linux/install.sh lampac
+
+EXPOSE 9999
+
+CMD ["bash", "Lampac/start.sh"]
+
 FROM ubuntu:22.04
 
 # ----------- БАЗОВАЯ СИСТЕМА -----------
