@@ -6,7 +6,6 @@ echo "=== Fetching Lampac source ==="
 rm -rf /app/lampac
 mkdir -p /app/lampac
 
-# Завантажуємо Lampac ZIP (Render дозволяє wget у runtime!)
 wget -O /app/lampac.zip https://github.com/lampame/lampac/archive/refs/heads/main.zip
 
 echo "=== Unzipping ==="
