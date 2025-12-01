@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y git unzip wget
+RUN apt-get update && apt-get install -y git unzip wget && apt-get clean
 
 COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh
