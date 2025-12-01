@@ -1,17 +1,17 @@
-FROM alpine:3.20
+FROM debian:12-slim
 
-# Базові пакети
-RUN apk add --no-cache bash curl wget git openjdk17-jre
+RUN apt update && apt install -y \
+    bash curl wget git openjdk17-jre ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-# Клонуємо RENDER
 RUN git clone --depth=1 https://github.com/yannisdokil/RENDER /app
 WORKDIR /app
 
-# Встановлення Lampac
 RUN bash Build/Linux/install.sh lampac
 
-# Порт Lampac
 EXPOSE 9999
+
+CMD ["bash", "Lampac/start.sh"]
 
 # Запуск
 CMD ["bash", "Lampac/start.sh"]
