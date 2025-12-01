@@ -1,20 +1,50 @@
-﻿# Базовий образ Lampac
-FROM immisterio/lampac:latest
+# ---------------------------
+# 1. Базовий образ із .NET
+# ---------------------------
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-# Встановлюємо unzip (якщо потрібно для модулів)
-RUN apt-get update && apt-get install -y unzip && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-# Папка для модулів
-WORKDIR /home/module
+# ---------------------------
+# 2. Клонування Lampac
+# ---------------------------
+RUN git clone https://github.com/lampame/lampac.git .
 
-# Копіюємо українські модулі
-COPY lampac-ukraine ./lampac-ukraine
+# ---------------------------
+# 3. Збірка Lampac
+# ---------------------------
+RUN dotnet publish Lampac.csproj -c Release -o /publish
 
-# Створюємо repository.yaml для Lampac
-COPY repository.yaml ./repository.yaml
 
-# Прокидуємо порт
-EXPOSE 9118
+# ---------------------------
+# 4. Фінальний образ
+# ---------------------------
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
-# Старт Lampac
-CMD ["lampac"]
+WORKDIR /app
+
+# Копіюємо зібраний Lampac
+COPY --from=build /publish /app
+
+
+# ---------------------------
+# 5. Автовстановлення українських модулів
+# ---------------------------
+RUN apt-get update && apt-get install -y git && \
+    git clone https://github.com/lampac-ukraine/lampac-ukraine.git /tmp/modules && \
+    mkdir -p /app/module && \
+    cp -r /tmp/modules/* /app/module/ && \
+    rm -rf /tmp/modules
+
+
+# ---------------------------
+# 6. Порт Lampac
+# ---------------------------
+EXPOSE 8080
+
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+
+# ---------------------------
+# 7. Запуск Lampac
+# ---------------------------
+ENTRYPOINT ["dotnet", "Lampac.dll"]
