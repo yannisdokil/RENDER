@@ -1,46 +1,15 @@
-﻿# \# Lampac + lampac-ukraine на Render.com
+﻿# Lampac Render Deployment
 
-# 
+Ready-to-deploy version for Render.com  
+Clones Lampac dynamically at startup, updates UA modules, caches them on Render Disk.
 
-# \## Деплой
+## Deploy steps
 
-# 
-
-# 1\. Розпакуй lampac-ukraine.zip у папку `lampac-ukraine` поруч з Dockerfile.
-
-# 2\. Створи Git репозиторій з цією папкою і запуш на GitHub.
-
-# 3\. На Render.com → New → Web Service:
-
-# &nbsp;  - Source: твій репозиторій
-
-# &nbsp;  - Branch: main
-
-# &nbsp;  - Environment: Docker
-
-# &nbsp;  - Port: 9118
-
-# 4\. Render автоматично побудує Docker образ і запустить Lampac.
-
-# 5\. Через 2–3 хвилини відкрий URL — Lampac з українськими модулями готовий.
-
-# 
-
-# \## Модулі
-
-# 
-
-# \- AnimeON
-
-# \- Anihub
-
-# \- Unimay
-
-# \- CikavaIdeya
-
-# \- Uaflix
-
-# \- UaTUT
-
-
-
+1. Create Repo: `lampac-render`
+2. Upload:
+   - Dockerfile
+   - start.sh
+   - README.md
+3. Go to Render → New Web Service
+4. Connect repository
+5. Add Disk:
